@@ -16,7 +16,39 @@ class AppTheme{
         inputDecorationTheme: InputDecorationTheme(),
         appBarTheme: AppBarTheme(
           backgroundColor: PrimaryLight,
-          centerTitle: true,
+          foregroundColor: White,
+          titleTextStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 22
+          )
+          ),
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            selectedItemColor: PrimaryLight,
+            unselectedItemColor: Grey,
+          ),
+          textTheme:TextTheme(
+            bodyLarge: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+              color: Black,
+            ),
+            bodyMedium: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: PrimaryLight
+            ),
+             bodySmall: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Black
+            )
+          ),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: PrimaryLight,
+            foregroundColor: White,
+            shape: CircleBorder(side: BorderSide(color: White,width: 4))
           )
         );
       static ThemeData DarkTheme = ThemeData(
