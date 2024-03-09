@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class SettingProvider with ChangeNotifier {
-  ThemeMode themMode = ThemeMode.light;
+  ThemeMode themeMode = ThemeMode.light;
   String languageCode = 'en';
 
   void changeTheme(ThemeMode selectedThemeMode){
-    themMode = selectedThemeMode;
+    themeMode = selectedThemeMode;
     notifyListeners();
   }
 
@@ -14,3 +14,4 @@ class SettingProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+

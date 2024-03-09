@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_application/Firebase_utils.dart';
+import 'package:todo_application/Models/Task_Model.dart';
+import 'package:todo_application/Tabs/Tasks/Tasks_Provider.dart';
 import 'package:todo_application/Tabs/Tasks/custom_textField.dart';
 import 'package:todo_application/Tabs/Tasks/deffultBottom.dart';
 import 'package:todo_application/app_Theme.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class addTaskBottomSheet extends StatefulWidget {
-  const addTaskBottomSheet({super.key});
+class AddTaskBottomSheet extends StatefulWidget {
+  const AddTaskBottomSheet({super.key});
 
   @override
-  State<addTaskBottomSheet> createState() => _addTaskBottomSheetState();
+  State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
 }
 
-class _addTaskBottomSheetState extends State<addTaskBottomSheet> {
+class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   DateTime selectedDate = DateTime.now();
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -50,12 +54,13 @@ class _addTaskBottomSheetState extends State<addTaskBottomSheet> {
                     firstDate: DateTime.now(),
                     lastDate: DateTime.now().add(const Duration(days: 365))
                   );if(dateTime != null){selectedDate=dateTime;}
+                  setState(() {});
                 },
                 child: Text(
-                  dateFormat.format(DateTime.now())
+                  dateFormat.format(selectedDate)
                   ,style: Theme.of(context).textTheme.bodySmall),
               ),
-              SizedBox(height: 12,),
+              const SizedBox(height: 12,),
               defultButtom(textt: "add",onPressed: addTask,),
             ],
           ),
@@ -64,5 +69,28 @@ class _addTaskBottomSheetState extends State<addTaskBottomSheet> {
     );
   }
 
-  void addTask(){}
+  void addTask(){
+    firebaseUtiles.addTaskToFirestore(
+      taskModel(
+        title: titleController.text,
+        description: descriptionController.text,
+        dateTime: selectedDate,
+    )).timeout(
+      const Duration(milliseconds: 500),
+      onTimeout: (){
+        Provider.of <TasksProvider> (context,listen: false).getTasks;
+        Navigator.of(context).pop();
+        Fluttertoast.showToast(
+        msg: "Task added successfully ",
+        toastLength: Toast.LENGTH_SHORT,
+    );
+
+      }).catchError((e){
+        Navigator.of(context).pop();
+      Fluttertoast.showToast(
+        msg: "Failed , please try again",
+        toastLength: Toast.LENGTH_SHORT,
+    );
+    });
+  }
 }

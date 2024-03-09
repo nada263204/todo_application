@@ -46,15 +46,15 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {});
           },
           items: [
-            BottomNavigationBarItem(
+              BottomNavigationBarItem(
+                icon: Icon(Icons.task),
+                label: 'Tasks',
+                ),
+              BottomNavigationBarItem(
               icon:
               Icon(Icons.settings),
               label: 'Setting'
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.task),
-                label: 'Tasks',
-                )
                 ],
                 type: BottomNavigationBarType.fixed,
                 ),
@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
               floatingActionButton: FloatingActionButton(
                 onPressed: (){
                   showModalBottomSheet(context: context,
-                  builder: (_) => addTaskBottomSheet());
+                  builder: (_) => AddTaskBottomSheet());
                 },
                 child: Icon(Icons.add
                 ,size: 30,),
