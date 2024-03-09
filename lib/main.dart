@@ -1,18 +1,35 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_application/Tabs/Settings/Setting_provider.dart';
+import 'package:todo_application/Tabs/Tasks/Tasks_Provider.dart';
 import 'package:todo_application/app_Theme.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:todo_application/home_Screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 
-void main() {
+Future<void> main() async {
+WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseFirestore.instance.disableNetwork();
+  FirebaseFirestore.instance.settings = const Settings(cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
   runApp(
-    ChangeNotifierProvider(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
       create: (context)=> SettingProvider(),
-      child:const MyApp()
+    ),
+    ChangeNotifierProvider(
+      create: (context)=> TasksProvider()..getTasks(),
     )
+      ],
+      child:const MyApp(),
+      )
      );
 }
 
@@ -26,7 +43,8 @@ class MyApp extends StatelessWidget {
     return  MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppTheme.LightTheme,
-        darkTheme:AppTheme.DarkTheme,
+            darkTheme: AppTheme.DarkTheme,
+            themeMode: settingProvider.themeMode,
        localizationsDelegates: AppLocalizations.localizationsDelegates,
        supportedLocales: AppLocalizations.supportedLocales,
        locale: Locale(settingProvider.languageCode),
